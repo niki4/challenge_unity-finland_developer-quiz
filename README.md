@@ -224,8 +224,29 @@ console.log(acc) // Account { debitBalance: 101, creditBalance: 199 }
 ## Q7: List four typical solutions to optimize database query performance
 Database queries are getting slow when the database size increases. What are some of the typical solutions to improve performance?
 
+### A7:
+1. *Indexing*: Ensure proper indexing for quick access to the database. Avoid full index scan.
+2. *Optimize queries* (by analyzing Execution Plan and SQL patterns), e.g.:
+    - `SELECT` fields instead of using `SELECT *`
+    - Avoid `SELECT DISTINCT`
+    - Create joins with `INNER JOIN` (not `WHERE`)
+    - Use `WHERE` instead of `HAVING` to define filters
+    - Use wildcards at the end of a phrase only, e.g. `LIKE %xx`
+3. *Limit stored/fetched data*
+    - Use `LIMIT` to sample query results
+    - Avoid correlated sub queries as it searches row by row, impacting the speed of SQL query processing. Proper JOIN type may work faster.
+    - Apply sharding to split data across the machines
+    - Analyze how the data is related and fetched. May it be combined to single table (denormalization) or even migrate to NoSQL db?
+4. *Define Business requirements / cases*
+    - If the data often fetched or rare? E.g., if the slow SQL query result need once a month, it most likely don't need optimization. We may schedule it to run during off peak-hours. 
+    
+more info:
+* <https://www.sisense.com/blog/8-ways-fine-tune-sql-queries-production-databases/>
+* <https://www.sqlshack.com/query-optimization-techniques-in-sql-server-the-basics/>
+* <https://www.mantralabsglobal.com/blog/sql-query-optimization-tips/>
+
 ## Q8: Coding task 1
-Go to the following JSFiddle: http://applifier.github.io/developer-quiz/q8.html. See the code comments for the assignment. Remember to *click save* and return the url for your fiddle.
+Go to the following JSFiddle: <http://applifier.github.io/developer-quiz/q8.html>. See the code comments for the assignment. Remember to *click save* and return the url for your fiddle.
 
 ## Q9: Coding task 2
-Go to the following JSFiddle: http://applifier.github.io/developer-quiz/q9.html. See the code comments for the assignment. Remember to *click save* and return the url for your fiddle.
+Go to the following JSFiddle: <http://applifier.github.io/developer-quiz/q9.html>. See the code comments for the assignment. Remember to *click save* and return the url for your fiddle.
