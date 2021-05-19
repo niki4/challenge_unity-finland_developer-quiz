@@ -248,5 +248,16 @@ more info:
 ## Q8: Coding task 1
 Go to the following JSFiddle: <http://applifier.github.io/developer-quiz/q8.html>. See the code comments for the assignment. Remember to *click save* and return the url for your fiddle.
 
+### A8 [JavaScript + No-Library (pure JS)]:
+My solution: <https://jsfiddle.net/niki4/3m46hf0r/> (copy in this repo: [statsCollector.js](statsCollector.js))
+
+Other solutions found: 
+- <https://stackoverflow.com/questions/45309447/calculating-median-javascript>
+- <http://jsfiddle.net/smahat13/zu4s91x3/146/>
+- <https://gist.github.com/hadaytullah/7c5f007239c562dab91010b3152b974b>
+- <https://pastebin.com/DzG5Gued>
+
 ## Q9: Coding task 2
 Go to the following JSFiddle: <http://applifier.github.io/developer-quiz/q9.html>. See the code comments for the assignment. Remember to *click save* and return the url for your fiddle.
+
+### A9  [Babel + JSX + No-Library (pure JS)]:
