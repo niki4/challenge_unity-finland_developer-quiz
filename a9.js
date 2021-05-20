@@ -27,28 +27,49 @@
 const API_BASE_URL = "https://rechomework.prd.mz.internal.unity3d.com/api";
 
 async function getRecentConversationSummaries () {
-  const conversations = await getJSON(`${API_BASE_URL}/conversations`)
+  // request for current user's conversations
+  const conversations = await getConversations()
 
   // request for messages in conversation, then pick most recent message from each conversation (chat)
-  const recentConversMessages = await Promise.all(conversations.map(
+  const recentConversMessages = await getConversationsRecentMessages(conversations)
+
+  // sort all the recent messages by Date
+  const sortedRecentConversMessages = sortRecentMessages(recentConversMessages)
+
+  // fetch users data
+  const userData = {}
+  await fetchUsers(sortedRecentConversMessages, userData)
+
+  // return an array of objects with the specified shape/type
+  return sortedRecentConversMessages.map(message => getSummaryOutputObject(message, userData));
+}
+
+function getConversations () {
+	return getJSON(`${API_BASE_URL}/conversations`)
+}
+
+function getConversationsRecentMessages(conversations) {
+	return Promise.all(conversations.map(
           conv => getJSON(`${API_BASE_URL}/conversations/${conv.id}/messages`)
           .then(chatMsgJson => chatMsgJson.reduce(
               (a, b) => (new Date(a.created_at) > new Date(b.created_at) ? a : b)))));
+}
 
-  // sort all the recent messages by Date
-  const sortedRecentConversMessages = recentConversMessages.sort(
+function sortRecentMessages (recentConversMessages) {
+	return recentConversMessages.sort(
       (a, b) => (new Date(b.created_at) - new Date(a.created_at)));
+}
 
-  let userData = {}
-  // fetch users data
-  await Promise.all(sortedRecentConversMessages.map(
+function fetchUsers(sortedRecentConversMessages, userData) {
+  return Promise.all(sortedRecentConversMessages.map(
   	async msg => {
   	    if (!userData.hasOwnProperty(msg.from_user_id)) {
   	        userData[msg.from_user_id] = await getJSON(`${API_BASE_URL}/users/${msg.from_user_id}`);
   	    }}));
+}
 
-  // return an array of objects with the specified shape/type
-  return sortedRecentConversMessages.map(message => ({
+function getSummaryOutputObject(message, userData) {
+	return {
     id: message.id,
     latest_message: {
       id: message.id,
@@ -59,7 +80,7 @@ async function getRecentConversationSummaries () {
       },
       created_at: message.created_at,
     }
-  }));
+  }
 }
 
 function getJSON(url) {
@@ -139,7 +160,33 @@ describe('getRecentConversationSummaries()', () => {
     ]);
   });
 
-  // TODO: Add more tests
+describe('getConversations()', () => {
+  it('should return conversations of current user', async() => {
+    const result = await getConversations();
+    result.should.deep.equal([{
+      "id": "1",
+      "with_user_id": "2",
+      "unread_message_count": 1
+    }, {
+      "id": "2",
+      "with_user_id": "3",
+      "unread_message_count": 0
+    }, {
+      "id": "3",
+      "with_user_id": "4",
+      "unread_message_count": 0
+    }, {
+      "id": "4",
+      "with_user_id": "5",
+      "unread_message_count": 0
+    }, {
+      "id": "5",
+      "with_user_id": "6",
+      "unread_message_count": 0
+    }]);
+  });
+});
+
 });
 
 // Run all our test suites.  Only necessary in the browser.
