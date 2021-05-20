@@ -40,13 +40,26 @@ async function getRecentConversationSummaries () {
       (a, b) => (new Date(b.created_at) - new Date(a.created_at)));
 
   let userData = {}
+  // fetch users data
   await Promise.all(sortedRecentConversMessages.map(
   	async msg => {
   	    if (!userData.hasOwnProperty(msg.from_user_id)) {
   	        userData[msg.from_user_id] = await getJSON(`${API_BASE_URL}/users/${msg.from_user_id}`);
-  	    }
-  	}));
-    console.log("userData:", userData)
+  	    }}));
+
+  // return an array of objects with the specified shape/type
+  return sortedRecentConversMessages.map(message => ({
+    id: message.id,
+    latest_message: {
+      id: message.id,
+      body: message.body,
+      from_user: {
+        id: userData[message.from_user_id].id,
+        avatar_url: userData[message.from_user_id].avatar_url,
+      },
+      created_at: message.created_at,
+    }
+  }));
 }
 
 function getJSON(url) {
@@ -60,7 +73,7 @@ mocha.setup("bdd");
 chai.should();
 
 describe('getRecentConversationSummaries()', () => {
-	it('should return the current user\'s latest conversations sorted by latest message\'s timestamp', async () => {
+  it('should return the current user\'s latest conversations sorted by latest message\'s timestamp', async () => {
     const result = await getRecentConversationSummaries();
     result.should.deep.equal([
       {
