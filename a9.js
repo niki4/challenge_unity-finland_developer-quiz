@@ -31,17 +31,17 @@ async function getRecentConversationSummaries () {
   const conversations = await getConversations()
 
   // request for messages in conversation, then pick most recent message from each conversation (chat)
-  const recentConversMessages = await getConversationsRecentMessages(conversations)
+  const recentConversationsMessages = await getConversationsRecentMessages(conversations)
 
   // sort all the recent messages by Date
-  const sortedRecentConversMessages = sortRecentMessages(recentConversMessages)
+  const sortedRecentConversationsMessages = sortRecentMessages(recentConversationsMessages)
 
   // fetch users data
   const userData = {}
-  await fetchUsers(sortedRecentConversMessages, userData)
+  await fetchUsers(sortedRecentConversationsMessages, userData)
 
   // return an array of objects with the specified shape/type
-  return sortedRecentConversMessages.map(message => getSummaryOutputObject(message, userData));
+  return sortedRecentConversationsMessages.map(message => getSummaryOutputObject(message, userData));
 }
 
 function getConversations () {
@@ -70,10 +70,10 @@ function fetchUsers(sortedRecentConversMessages, userData) {
 
 function getSummaryOutputObject(message, userData) {
 	return {
-    id: message.id,
-    latest_message: {
-      id: message.id,
-      body: message.body,
+	  id: message.id,
+      latest_message: {
+	    id: message.id,
+        body: message.body,
       from_user: {
         id: userData[message.from_user_id].id,
         avatar_url: userData[message.from_user_id].avatar_url,
