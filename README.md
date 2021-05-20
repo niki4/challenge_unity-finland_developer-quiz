@@ -261,7 +261,7 @@ Other solutions found:
 Go to the following JSFiddle: <http://applifier.github.io/developer-quiz/q9.html>. See the code comments for the assignment. Remember to *click save* and return the url for your fiddle.
 
 ### A9  [Babel + JSX + No-Library (pure JS)]:
-My solution: (copy in this repo: [getRecentConversationSummaries.js](getRecentConversationSummaries.js))
+My solution: <https://jsfiddle.net/niki4/bwf56eop/4/> (copy in this repo: [getRecentConversationSummaries.js](getRecentConversationSummaries.js))
 
 Other solutions found:
 - https://github.com/soeunj/getRecentConversationSummaries
