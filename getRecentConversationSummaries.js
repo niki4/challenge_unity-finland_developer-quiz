@@ -93,97 +93,217 @@ function getJSON(url) {
 mocha.setup("bdd");
 chai.should();
 
+const testConversations = [{
+  id: "1",
+  unread_message_count: 1,
+  with_user_id: "2"
+}, {
+  id: "2",
+  unread_message_count: 0,
+  with_user_id: "3"
+}, {
+  id: "3",
+  unread_message_count: 0,
+  with_user_id: "4"
+}, {
+  id: "4",
+  unread_message_count: 0,
+  with_user_id: "5"
+}, {
+  id: "5",
+  unread_message_count: 0,
+  with_user_id: "6"
+}]
+
+const testRecentConversationsMessages = [{
+  body: "Moi!",
+  conversation_id: "1",
+  created_at: "2016-08-25T10:15:00.670Z",
+  from_user_id: "1",
+  id: "1"
+}, {
+  body: "Hello!",
+  conversation_id: "2",
+  created_at: "2016-08-24T10:15:00.670Z",
+  from_user_id: "3",
+  id: "2"
+}, {
+  body: "Hi!",
+  conversation_id: "3",
+  created_at: "2016-08-23T10:15:00.670Z",
+  from_user_id: "1",
+  id: "3"
+}, {
+  body: "Morning!",
+  conversation_id: "4",
+  created_at: "2016-08-22T10:15:00.670Z",
+  from_user_id: "5",
+  id: "4"
+}, {
+  body: "Pleep!",
+  conversation_id: "5",
+  created_at: "2016-08-21T10:15:00.670Z",
+  from_user_id: "6",
+  id: "5"
+}]
+
+const testSortedRecentConversationsMessages = [{
+  body: "Moi!",
+  conversation_id: "1",
+  created_at: "2016-08-25T10:15:00.670Z",
+  from_user_id: "1",
+  id: "1"
+}, {
+  body: "Hello!",
+  conversation_id: "2",
+  created_at: "2016-08-24T10:15:00.670Z",
+  from_user_id: "3",
+  id: "2"
+}, {
+  body: "Hi!",
+  conversation_id: "3",
+  created_at: "2016-08-23T10:15:00.670Z",
+  from_user_id: "1",
+  id: "3"
+}, {
+  body: "Morning!",
+  conversation_id: "4",
+  created_at: "2016-08-22T10:15:00.670Z",
+  from_user_id: "5",
+  id: "4"
+}, {
+  body: "Pleep!",
+  conversation_id: "5",
+  created_at: "2016-08-21T10:15:00.670Z",
+  from_user_id: "6",
+  id: "5"
+}]
+
+const testUserData = {
+  1: {
+    avatar_url: "http://placekitten.com/g/300/300",
+    id: "1",
+    username: "John"
+  },
+  3: {
+    avatar_url: "http://placekitten.com/g/302/302",
+    id: "3",
+    username: "Jeremy"
+  },
+  5: {
+    avatar_url: "http://placekitten.com/g/304/304",
+    id: "5",
+    username: "Charles"
+  },
+  6: {
+    avatar_url: "http://placekitten.com/g/305/305",
+    id: "6",
+    username: "George"
+  }
+}
+
+const testRecentConversationSummariesOutput = [
+  {
+    id: "1",
+    latest_message: {
+      id: "1",
+      body: "Moi!",
+      from_user: {
+        id: "1",
+        avatar_url: "http://placekitten.com/g/300/300",
+      },
+      created_at: "2016-08-25T10:15:00.670Z",
+    },
+  },
+  {
+    id: "2",
+    latest_message: {
+      id: "2",
+      body: "Hello!",
+      from_user: {
+        id: "3",
+        avatar_url: "http://placekitten.com/g/302/302",
+      },
+      created_at: "2016-08-24T10:15:00.670Z",
+    },
+  },
+  {
+    id: "3",
+    latest_message: {
+      id: "3",
+      body: "Hi!",
+      from_user: {
+        id: "1",
+        avatar_url: "http://placekitten.com/g/300/300",
+      },
+      created_at: "2016-08-23T10:15:00.670Z",
+    },
+  },
+  {
+    id: "4",
+    latest_message: {
+      id: "4",
+      body: "Morning!",
+      from_user: {
+        id: "5",
+        avatar_url: "http://placekitten.com/g/304/304",
+      },
+      created_at: "2016-08-22T10:15:00.670Z",
+    },
+  },
+  {
+    id: "5",
+    latest_message: {
+      id: "5",
+      body: "Pleep!",
+      from_user: {
+        id: "6",
+        avatar_url: "http://placekitten.com/g/305/305",
+      },
+      created_at: "2016-08-21T10:15:00.670Z",
+    },
+  },
+]
+
 describe('getRecentConversationSummaries()', () => {
   it('should return the current user\'s latest conversations sorted by latest message\'s timestamp', async () => {
     const result = await getRecentConversationSummaries();
-    result.should.deep.equal([
-      {
-        id: "1",
-        latest_message: {
-          id: "1",
-          body: "Moi!",
-          from_user: {
-            id: "1",
-            avatar_url: "http://placekitten.com/g/300/300",
-          },
-          created_at: "2016-08-25T10:15:00.670Z",
-        },
-      },
-      {
-        id: "2",
-        latest_message: {
-          id: "2",
-          body: "Hello!",
-          from_user: {
-            id: "3",
-            avatar_url: "http://placekitten.com/g/302/302",
-          },
-          created_at: "2016-08-24T10:15:00.670Z",
-        },
-      },
-      {
-        id: "3",
-        latest_message: {
-          id: "3",
-          body: "Hi!",
-          from_user: {
-            id: "1",
-            avatar_url: "http://placekitten.com/g/300/300",
-          },
-          created_at: "2016-08-23T10:15:00.670Z",
-        },
-      },
-      {
-        id: "4",
-        latest_message: {
-          id: "4",
-          body: "Morning!",
-          from_user: {
-            id: "5",
-            avatar_url: "http://placekitten.com/g/304/304",
-          },
-          created_at: "2016-08-22T10:15:00.670Z",
-        },
-      },
-      {
-        id: "5",
-        latest_message: {
-          id: "5",
-          body: "Pleep!",
-          from_user: {
-            id: "6",
-            avatar_url: "http://placekitten.com/g/305/305",
-          },
-          created_at: "2016-08-21T10:15:00.670Z",
-        },
-      },
-    ]);
+    result.should.deep.equal(testRecentConversationSummariesOutput);
   });
 
 describe('getConversations()', () => {
   it('should return conversations of current user', async() => {
     const result = await getConversations();
-    result.should.deep.equal([{
-      "id": "1",
-      "with_user_id": "2",
-      "unread_message_count": 1
-    }, {
-      "id": "2",
-      "with_user_id": "3",
-      "unread_message_count": 0
-    }, {
-      "id": "3",
-      "with_user_id": "4",
-      "unread_message_count": 0
-    }, {
-      "id": "4",
-      "with_user_id": "5",
-      "unread_message_count": 0
-    }, {
-      "id": "5",
-      "with_user_id": "6",
-      "unread_message_count": 0
-    }]);
+    result.should.deep.equal(testConversations);
+  });
+});
+
+describe('getConversationsRecentMessages()', () => {
+  it('should return recent messages of conversations', async() => {
+    const result = await getConversationsRecentMessages(testConversations);
+    result.should.deep.equal(testRecentConversationsMessages);
+  });
+});
+
+describe('sortRecentMessages()', () => {
+  it('should return conversations messages sorted by the latest message timstamp (most recent conversation first).', async() => {
+    const result = sortRecentMessages(testRecentConversationsMessages);
+    result.should.deep.equal(testSortedRecentConversationsMessages);
+  });
+});
+
+describe('fetchUsers()', () => {
+  it('should return users data', async() => {
+    const userDataResult = {}
+    await fetchUsers(testSortedRecentConversationsMessages, userDataResult);
+    userDataResult.should.deep.equal(testUserData);
+  });
+});
+
+describe('getSummaryOutputObject()', () => {
+  it('should return user Summary object with the specified shape', async() => {
+    const result = getSummaryOutputObject(testSortedRecentConversationsMessages[0], testUserData);
+    result.should.deep.equal(testRecentConversationSummariesOutput[0]);
   });
 });
 
